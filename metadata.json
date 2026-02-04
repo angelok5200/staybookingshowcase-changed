@@ -1,0 +1,8 @@
+
+{
+  "name": "StayBooking MVP",
+  "description": "A high-performance booking platform MVP with React frontend and Spring Boot backend structure, featuring JWT auth, room searching, and booking management.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
