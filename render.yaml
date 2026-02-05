@@ -2,18 +2,17 @@ services:
   # 1. Java Backend (Spring Boot)
   - type: web
     name: staybooking-backend
-    runtime: java        # Використовуємо runtime замінюючи застарілий env
+    env: java
+    plan: free
     region: frankfurt
-    plan: free           # Чітко вказуємо безкоштовний тариф
-    rootDirectory: backend  # Вказуємо Render зайти саме в цю папку
+    rootDir: backend
     buildCommand: mvn clean install -DskipTests
     startCommand: java -jar target/*.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
       - key: JAVA_VERSION
-        value: 17        # Вкажіть 17 або 21 залежно від вашого проекту
-      # Змінні для підключення до БД (заповнюються в панелі Render)
+        value: 17
       - key: POSTGRES_URL
         sync: false
       - key: POSTGRES_USER
@@ -24,10 +23,11 @@ services:
   # 2. Frontend (React/Vite)
   - type: web
     name: staybooking-frontend
-    runtime: static      # Для фронтенду використовуємо static
-    region: frankfurt
+    env: static
     plan: free
-    # Якщо фронтенд у папці (наприклад, 'frontend'), додайте rootDirectory: frontend
+    region: frankfurt
+    # Якщо ваш фронтенд у корені, rootDir не потрібен. 
+    # Якщо у папці, наприклад 'frontend', додайте: rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     envVars:
