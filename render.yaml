@@ -1,11 +1,11 @@
 services:
-  # 1. Java Backend (Spring Boot)
+  # 1. Java Backend (Web Service)
   - type: web
     name: staybooking-backend
-    runtime: java             # Використовуємо runtime для типу web
+    env: java             # Для Web Service у YAML використовується env, а не runtime
     plan: free
     region: frankfurt
-    rootDir: backend          # Шлях до папки з pom.xml
+    rootDir: backend
     buildCommand: mvn clean install -DskipTests
     startCommand: java -jar target/*.jar
     envVars:
@@ -20,17 +20,18 @@ services:
       - key: POSTGRES_PASSWORD
         sync: false
 
-  # 2. Frontend (React/Vite)
-  - type: web
-    name: staybooking-frontend
-    runtime: static           # Використовуємо runtime: static
-    plan: free
-    # ПОЛЕ REGION ТУТ ЗАБОРОНЕНО СПЕЦИФІКАЦІЄЮ ДЛЯ STATIC
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./dist # Це поле обов'язкове для runtime: static
-    envVars:
-      - key: VITE_API_BASE_URL
-        fromService:
-          name: staybooking-backend
-          type: web
-          property: host
+  # 2. Frontend (Static Site)
+  # УВАГА: Для фронтенду ми змінюємо type на static
+- type: static
+  name: staybooking-frontend
+  env: static
+  plan: free
+  # Регіон видалено, бо для static він не підтримується (CDN)
+  buildCommand: npm install && npm run build
+  publishPath: ./dist
+  envVars:
+    - key: VITE_API_BASE_URL
+      fromService:
+        name: staybooking-backend
+        type: web
+        property: host
