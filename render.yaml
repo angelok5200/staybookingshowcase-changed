@@ -1,5 +1,4 @@
 services:
-  # 1. Java Backend (Web Service)
   - type: web
     name: staybooking-backend
     env: java             
@@ -20,7 +19,6 @@ services:
       - key: POSTGRES_PASSWORD
         sync: false
 
-  # 2. Frontend (Static Site)
 - type: static
   name: staybooking-frontend
   env: static
