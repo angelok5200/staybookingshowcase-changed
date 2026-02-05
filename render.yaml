@@ -18,14 +18,13 @@ services:
       - key: POSTGRES_PASSWORD
         sync: false
 
-  # 2. Налаштування Frontend (React/Vite)
-  # Хоча ви хотіли залишити його на Vercel, через Blueprint можна запустити його і тут
-  # Якщо хочете залишити на Vercel — просто видаліть цей блок
+
+# 2. Налаштування Frontend (React/Vite)
   - type: web
     name: staybooking-frontend
     env: static
     buildCommand: npm install && npm run build
-    publishPath: ./dist
+    staticPublishPath: ./dist  # Ось тут була помилка, змініть на staticPublishPath
     envVars:
       - key: VITE_API_BASE_URL
         fromService:
