@@ -1,30 +1,35 @@
 services:
-  # 1. Налаштування Java Backend (Spring Boot)
+  # 1. Java Backend (Spring Boot)
   - type: web
     name: staybooking-backend
-    env: java
-    region: frankfurt # Найближчий регіон до Ердінга/Мюнхена
-    buildCommand: mvn -f backend/pom.xml clean install -DskipTests
-    startCommand: java -jar backend/target/*.jar
+    runtime: java        # Використовуємо runtime замінюючи застарілий env
+    region: frankfurt
+    plan: free           # Чітко вказуємо безкоштовний тариф
+    rootDirectory: backend  # Вказуємо Render зайти саме в цю папку
+    buildCommand: mvn clean install -DskipTests
+    startCommand: java -jar target/*.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      # Змінні для підключення до вашої БД на Vercel
-      # Після створення сервісу вам потрібно буде вписати реальні значення в панелі Render
+      - key: JAVA_VERSION
+        value: 17        # Вкажіть 17 або 21 залежно від вашого проекту
+      # Змінні для підключення до БД (заповнюються в панелі Render)
       - key: POSTGRES_URL
-        sync: false 
+        sync: false
       - key: POSTGRES_USER
         sync: false
       - key: POSTGRES_PASSWORD
         sync: false
 
-
-# 2. Налаштування Frontend (React/Vite)
+  # 2. Frontend (React/Vite)
   - type: web
     name: staybooking-frontend
-    env: static
+    runtime: static      # Для фронтенду використовуємо static
+    region: frankfurt
+    plan: free
+    # Якщо фронтенд у папці (наприклад, 'frontend'), додайте rootDirectory: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist  # Ось тут була помилка, змініть на staticPublishPath
+    staticPublishPath: ./dist
     envVars:
       - key: VITE_API_BASE_URL
         fromService:
