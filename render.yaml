@@ -2,7 +2,7 @@ services:
   # 1. Java Backend (Web Service)
   - type: web
     name: staybooking-backend
-    env: java             # Для Web Service у YAML використовується env, а не runtime
+    env: java             
     plan: free
     region: frankfurt
     rootDir: backend
@@ -21,12 +21,10 @@ services:
         sync: false
 
   # 2. Frontend (Static Site)
-  # УВАГА: Для фронтенду ми змінюємо type на static
 - type: static
   name: staybooking-frontend
   env: static
   plan: free
-  # Регіон видалено, бо для static він не підтримується (CDN)
   buildCommand: npm install && npm run build
   publishPath: ./dist
   envVars:
