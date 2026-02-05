@@ -1,10 +1,10 @@
 services:
-  # 1. Java Backend (Spring Boot)
+  # 1. Java Backend (Web Service)
   - type: web
     name: staybooking-backend
-    env: java
+    env: java             # Для Java використовуємо env: java (runtime не підтримується в YAML)
     plan: free
-    region: frankfurt
+    region: frankfurt     # Web-сервіси МАЮТЬ мати регіон
     rootDir: backend
     buildCommand: mvn clean install -DskipTests
     startCommand: java -jar target/*.jar
@@ -20,14 +20,12 @@ services:
       - key: POSTGRES_PASSWORD
         sync: false
 
-  # 2. Frontend (React/Vite)
+  # 2. Frontend (Static Site)
   - type: web
     name: staybooking-frontend
-    env: static
+    env: static           # Для статичних сайтів використовуємо env: static
     plan: free
-    region: frankfurt
-    # Якщо ваш фронтенд у корені, rootDir не потрібен. 
-    # Якщо у папці, наприклад 'frontend', додайте: rootDir: frontend
+    # РЕГІОН ВИДАЛЕНО: Статичні сайти в Render працюють через Global CDN, тому регіон для них — помилка
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     envVars:
